@@ -242,12 +242,9 @@ amigos y familiares`,iconBg:"bg-[#3A8DDE]",icon:"P",iconText:"text-white"}];func
           if(numEl) numEl.textContent = map[k];
         }
       }
-      if(!card.querySelector('.src-caracol')){
-        const src = document.createElement('div');
-        src.className = 'src-caracol mt-2 text-[9px] opacity-60 font-bold';
-        src.innerHTML = 'fuente: <a href="https://www.caracol.com.co" target="_blank" class="underline">caracol</a> · en vivo';
-        card.appendChild(src);
-      }
+      // fuente en vivo eliminada por petición - no mostrar en tarjetas
+      const existingSrc = card.querySelector('.src-caracol');
+      if(existingSrc) existingSrc.remove();
     });
     saltarCuadros();
     const p = document.querySelector('#balance p');
