@@ -106,9 +106,9 @@
 #hc-carrete{background:transparent;padding:24px 0;position:relative;overflow:hidden;isolation:isolate}
 #hc-carrete .hc-marquee-wrapper{position:relative}
 #hc-carrete .hc-marquee{overflow:hidden;width:100%}
-#hc-carrete .hc-track{display:flex;gap:14px;width:max-content;animation:hc-scroll 150s linear infinite;will-change:transform}
+#hc-carrete .hc-track{display:flex;gap:14px;width:max-content;animation:hc-scroll 240s linear infinite;will-change:transform}
 #hc-carrete .hc-marquee:hover .hc-track{animation-play-state:paused}
-#hc-carrete .hc-marquee.hc-reverse .hc-track{animation:hc-scroll-rev 160s linear infinite}
+#hc-carrete .hc-marquee.hc-reverse .hc-track{animation:hc-scroll-rev 240s linear infinite}
 @keyframes hc-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 @keyframes hc-scroll-rev{0%{transform:translateX(-50%)}100%{transform:translateX(0)}}
 #hc-carrete .hc-card{width:340px;flex-shrink:0;border-radius:18px;overflow:hidden;background:#111;position:relative;aspect-ratio:4/3;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.15);transition:transform .28s ease}
@@ -118,7 +118,7 @@
 #hc-carrete .hc-lightbox.active{display:flex}
 #hc-carrete .hc-lightbox img{max-width:92vw;max-height:88vh;border-radius:12px}
 #hc-carrete .hc-close{position:absolute;top:18px;right:18px;color:#fff;font-size:22px;cursor:pointer;background:rgba(255,255,255,.12);width:40px;height:40px;display:grid;place-items:center;border-radius:50%}
-@media(max-width:640px){#hc-carrete .hc-card{width:260px}#hc-carrete .hc-track{gap:10px;animation-duration:90s!important}}
+@media(max-width:640px){#hc-carrete .hc-card{width:260px}#hc-carrete .hc-track{gap:10px;animation-duration:120s!important}}
 </style>
 </head>
 <body>
@@ -126,7 +126,6 @@
 <section id="hc-carrete">
   <div class="hc-marquee-wrapper">
     <div class="hc-marquee"><div class="hc-track" id="hc-track1"></div></div>
-    <div class="hc-marquee hc-reverse" style="margin-top:14px"><div class="hc-track" id="hc-track2"></div></div>
   </div>
   <div class="hc-lightbox" id="hc-lb" onclick="this.classList.remove('active')"><div class="hc-close">✕</div><img id="hc-lb-img" alt=""></div>
 </section>
@@ -185,18 +184,28 @@
 "50.webp",
 "51.webp",
  ];
+ // Fisher-Yates shuffle para orden aleatorio en cada carga
+ function shuffle(array){
+   var a = array.slice();
+   for(var i=a.length-1;i>0;i--){
+     var j=Math.floor(Math.random()*(i+1));
+     var tmp=a[i]; a[i]=a[j]; a[j]=tmp;
+   }
+   return a;
+ }
  function render(id,arr){
-  const track=document.getElementById(id);
-  const doubled=arr.concat(arr);
-  let html="";
-  for(let i=0;i<doubled.length;i++){
-    const f=doubled[i];
+  var track=document.getElementById(id);
+  if(!track) return;
+  var doubled=arr.concat(arr);
+  var html="";
+  for(var i=0;i<doubled.length;i++){
+    var f=doubled[i];
     html+='<div class="hc-card" onclick="document.getElementById(\'hc-lb-img\').src=\''+f+'\';document.getElementById(\'hc-lb\').classList.add(\'active\')"><img loading="lazy" decoding="async" src="'+f+'" alt="acopio" width="1000" height="750"></div>';
   }
   track.innerHTML=html;
  }
- render('hc-track1',photos);
- render('hc-track2',photos.slice().reverse());
+ var randomPhotos = shuffle(photos);
+ render('hc-track1',randomPhotos);
  document.addEventListener('keydown',function(e){if(e.key==='Escape')document.getElementById('hc-lb').classList.remove('active')});
 })();
 </script>
